@@ -1,8 +1,58 @@
-#
-# application.yml — главный конфигурационный файл Spring Boot.
+server:
+  port: 8080
+  servlet:
+    context-path: /api
 
-Что нужно сделать:
-  - Указать настройки подключения к базе данных.
-  - Указать порт приложения.
-  - Настроить параметры безопасности и JWT.
-  - Включить Swagger UI.
+spring:
+  application:
+    name: bank-card-manager
+  datasource:
+    url: jdbc:postgresql://localhost:5432/card_db
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          secret-key: ${JWT_SECRET:your-super-secret-jwt-key-min-256-bits-here}
+
+jwt:
+  secret: ${JWT_SECRET:your-super-secret-jwt-key-min-256-bits-here}
+  expiration: 86400000 # 24 hours
+
+encryption:
+  key: ${ENCRYPTION_KEY:your-32-byte-encryption-key-here}
+  algorithm: AES
+  transformation: AES/CBC/PKCS5Padding
+
+logging:
+  level:
+    com.bank.card.manager: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  file:
+    name: logs/application.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+    display-request-duration: true
