@@ -15,13 +15,13 @@ public class JwtResponse {
     private String tokenType;
     private Long expiresIn;
     private String refreshToken;
-    private UserResponse user;
+    private UserInfo user;
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class UserResponse {
+    public static class UserInfo {
         private Long id;
         private String username;
         private String email;

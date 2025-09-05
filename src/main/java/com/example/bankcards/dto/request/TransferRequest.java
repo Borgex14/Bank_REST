@@ -24,4 +24,6 @@ public class TransferRequest {
 
     @NotNull(message = "Currency is required")
     private String currency;
+
+    private String description;
 }

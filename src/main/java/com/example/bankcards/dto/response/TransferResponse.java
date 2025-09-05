@@ -27,4 +27,5 @@ public class TransferResponse {
     private String description;
     private LocalDateTime createdAt;
     private String merchantName;
+    private LocalDateTime timestamp;
 }

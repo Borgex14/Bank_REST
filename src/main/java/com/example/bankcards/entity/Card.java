@@ -72,6 +72,10 @@ public class Card {
     @OneToMany(mappedBy = "toCard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Transaction> incomingTransactions = new ArrayList<>();
 
+    public boolean isBlocked() {
+        return this.status == CardStatus.BLOCKED;
+    }
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

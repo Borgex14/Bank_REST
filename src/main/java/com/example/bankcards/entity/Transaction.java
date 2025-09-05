@@ -59,6 +59,9 @@ public class Transaction {
     @Column(name = "merchant_id", length = 50)
     private String merchantId;
 
+    @Column(nullable = false)
+    private LocalDateTime timestamp;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
