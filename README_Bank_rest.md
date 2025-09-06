@@ -136,26 +136,29 @@ psql -c "GRANT ALL PRIVILEGES ON DATABASE bankdb TO bankuser;"
 3. Настройка конфигурации
 
 properties
-# server configuration
-server.port=8080
-server.servlet.context-path=/api
+spring:
+config:
+activate:
+on-profile: dev
+datasource:
+url: jdbc:h2:mem:bankdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+username: sa
+password: password
+driver-class-name: org.h2.Driver
+jpa:
+database-platform: org.hibernate.dialect.H2Dialect
+hibernate:
+ddl-auto: create-drop
+h2:
+console:
+enabled: true
+path: /h2-console
 
-# database configuration (development)
-spring.datasource.url=jdbc:h2:mem:bankdb
-spring.datasource.username=sa
-spring.datasource.password=password
+jwt:
+secret-key: your-256-bit-secret-key-here-for-development
 
-# jpa configuration
-spring.jpa.hibernate.ddl-auto=create-drop
-spring.jpa.show-sql=true
-
-# jwt configuration
-jwt.secret-key=your-256-bit-secret-key-here
-jwt.expiration=86400000
-
-# openapi
-springdoc.api-docs.path=/api-docs
-springdoc.swagger-ui.path=/swagger-ui.html
+encryption:
+key: dev-encryption-key-32-bytes-here
 4. Сборка проекта
    С помощью Maven:
    bash
