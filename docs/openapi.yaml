@@ -1,1 +1,761 @@
-# Здесь будет OpenAPI описание всех доступных эндпоинтов и моделей данных.
+openapi: 3.0.3
+info:
+  title: Bank Card Management API
+  version: 1.0.0
+  description: REST API for managing bank cards, transfers, and user authentication
+  contact:
+    name: API Support
+    email: support@bank.com
+
+servers:
+  - url: http://localhost:8080/api
+    description: Development server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    # Request DTOs
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: "john_doe"
+        password:
+          type: string
+          format: password
+          example: "password123"
+
+    RegisterRequest:
+      type: object
+      required:
+        - username
+        - password
+        - email
+        - firstName
+        - lastName
+      properties:
+        username:
+          type: string
+          minLength: 3
+          maxLength: 50
+          example: "john_doe"
+        password:
+          type: string
+          format: password
+          minLength: 6
+          example: "password123"
+        email:
+          type: string
+          format: email
+          example: "john@example.com"
+        firstName:
+          type: string
+          maxLength: 50
+          example: "John"
+        lastName:
+          type: string
+          maxLength: 50
+          example: "Doe"
+
+    CardCreateRequest:
+      type: object
+      required:
+        - cardHolderName
+        - type
+        - currency
+      properties:
+        cardHolderName:
+          type: string
+          maxLength: 100
+          example: "JOHN DOE"
+        type:
+          $ref: '#/components/schemas/CardType'
+        currency:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: "USD"
+        initialBalance:
+          type: number
+          format: decimal
+          minimum: 0
+          example: 1000.00
+
+    CardFilterRequest:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/CardStatus'
+        type:
+          $ref: '#/components/schemas/CardType'
+        currency:
+          type: string
+          example: "USD"
+        minBalance:
+          type: number
+          format: decimal
+          example: 100.00
+        maxBalance:
+          type: number
+          format: decimal
+          example: 5000.00
+        expirationDateFrom:
+          type: string
+          format: date
+          example: "2024-01-01"
+        expirationDateTo:
+          type: string
+          format: date
+          example: "2025-12-31"
+        isExpired:
+          type: boolean
+          example: false
+        userId:
+          type: integer
+          format: int64
+          example: 1
+
+    TransferRequest:
+      type: object
+      required:
+        - fromCardId
+        - toCardId
+        - amount
+        - currency
+      properties:
+        fromCardId:
+          type: integer
+          format: int64
+          example: 1
+        toCardId:
+          type: integer
+          format: int64
+          example: 2
+        amount:
+          type: number
+          format: decimal
+          minimum: 0.01
+          example: 100.00
+        currency:
+          type: string
+          example: "USD"
+        description:
+          type: string
+          example: "Monthly transfer"
+
+    # Response DTOs
+    JwtResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        tokenType:
+          type: string
+          example: "Bearer"
+        expiresIn:
+          type: integer
+          format: int64
+          example: 86400
+        refreshToken:
+          type: string
+          example: "refresh_token_here"
+        user:
+          $ref: '#/components/schemas/UserInfo'
+
+    UserInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        username:
+          type: string
+          example: "john_doe"
+        email:
+          type: string
+          format: email
+          example: "john@example.com"
+        firstName:
+          type: string
+          example: "John"
+        lastName:
+          type: string
+          example: "Doe"
+        role:
+          type: string
+          example: "USER"
+
+    CardResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        cardNumber:
+          type: string
+          example: "**** **** **** 1234"
+        cardHolderName:
+          type: string
+          example: "JOHN DOE"
+        expirationDate:
+          type: string
+          format: date
+          example: "2025-12-31"
+        balance:
+          type: number
+          format: decimal
+          example: 1500.00
+        currency:
+          type: string
+          example: "USD"
+        status:
+          $ref: '#/components/schemas/CardStatus'
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-01-01T10:00:00Z"
+        type:
+          type: string
+          example: "DEBIT"
+
+    CardDetailResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        cardNumber:
+          type: string
+          example: "**** **** **** 1234"
+        cardHolderName:
+          type: string
+          example: "JOHN DOE"
+        expirationDate:
+          type: string
+          format: date
+          example: "2025-12-31"
+        balance:
+          type: number
+          format: decimal
+          example: 1500.00
+        currency:
+          type: string
+          example: "USD"
+        status:
+          $ref: '#/components/schemas/CardStatus'
+        type:
+          $ref: '#/components/schemas/CardType'
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-01-01T10:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-01-02T15:30:00Z"
+        userId:
+          type: integer
+          format: int64
+          example: 1
+        username:
+          type: string
+          example: "john_doe"
+        isExpired:
+          type: boolean
+          example: false
+
+    TransferResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        transactionId:
+          type: string
+          example: "TXN_123456789"
+        fromCardId:
+          type: integer
+          format: int64
+          example: 1
+        fromCardNumber:
+          type: string
+          example: "**** **** **** 1234"
+        toCardId:
+          type: integer
+          format: int64
+          example: 2
+        toCardNumber:
+          type: string
+          example: "**** **** **** 5678"
+        amount:
+          type: number
+          format: decimal
+          example: 100.00
+        fee:
+          type: number
+          format: decimal
+          example: 1.50
+        currency:
+          type: string
+          example: "USD"
+        status:
+          $ref: '#/components/schemas/TransactionStatus'
+        description:
+          type: string
+          example: "Monthly transfer"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-01-01T10:00:00Z"
+        merchantName:
+          type: string
+          example: "Online Store"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-01T10:00:00Z"
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        username:
+          type: string
+          example: "john_doe"
+        email:
+          type: string
+          format: email
+          example: "john@example.com"
+        firstName:
+          type: string
+          example: "John"
+        lastName:
+          type: string
+          example: "Doe"
+        role:
+          type: string
+          example: "USER"
+        isActive:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-01-01T10:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-01-02T15:30:00Z"
+        cardsCount:
+          type: integer
+          example: 2
+        cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardResponse'
+
+    ApiError:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-01T10:00:00Z"
+        status:
+          type: integer
+          example: 400
+        error:
+          type: string
+          example: "Bad Request"
+        message:
+          type: string
+          example: "Validation failed"
+        path:
+          type: string
+          example: "/api/auth/register"
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+
+    FieldError:
+      type: object
+      properties:
+        field:
+          type: string
+          example: "email"
+        message:
+          type: string
+          example: "must be a valid email address"
+        rejectedValue:
+          type: string
+          example: "invalid-email"
+
+    # Enums
+    CardStatus:
+      type: string
+      enum:
+        - ACTIVE
+        - BLOCKED
+        - EXPIRED
+        - PENDING
+
+    CardType:
+      type: string
+      enum:
+        - DEBIT
+        - CREDIT
+        - PREPAID
+        - VIRTUAL
+
+    TransactionStatus:
+      type: string
+      enum:
+        - PENDING
+        - COMPLETED
+        - FAILED
+        - CANCELLED
+        - REFUNDED
+
+    Role:
+      type: string
+      enum:
+        - USER
+        - ADMIN
+
+  parameters:
+    pageable:
+      name: pageable
+      in: query
+      description: Pagination and sorting parameters
+      schema:
+        type: object
+        properties:
+          page:
+            type: integer
+            minimum: 0
+            example: 0
+          size:
+            type: integer
+            minimum: 1
+            maximum: 100
+            example: 10
+          sort:
+            type: string
+            example: "createdAt,desc"
+
+  responses:
+    UnauthorizedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+
+    ForbiddenError:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+
+    ValidationError:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+
+security:
+  - bearerAuth: []
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register new user
+      description: Create a new user account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '200':
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '409':
+          description: Username or email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Login user
+      description: Authenticate user and return JWT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: Logout user
+      description: Invalidate user's JWT token
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: "Bearer {token}"
+      responses:
+        '200':
+          description: Logout successful
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /cards:
+    post:
+      tags:
+        - Cards
+      summary: Create new card
+      description: Admin only endpoint to create a new bank card
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardCreateRequest'
+      responses:
+        '200':
+          description: Card created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+    get:
+      tags:
+        - Cards
+      summary: Get user cards with filtering and pagination
+      description: Retrieve user's cards with optional filtering and pagination
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/pageable'
+        - in: query
+          name: status
+          schema:
+            $ref: '#/components/schemas/CardStatus'
+        - in: query
+          name: type
+          schema:
+            $ref: '#/components/schemas/CardType'
+        - in: query
+          name: currency
+          schema:
+            type: string
+        - in: query
+          name: minBalance
+          schema:
+            type: number
+            format: decimal
+        - in: query
+          name: maxBalance
+          schema:
+            type: number
+            format: decimal
+      responses:
+        '200':
+          description: Cards retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CardResponse'
+                  totalElements:
+                    type: integer
+                  totalPages:
+                    type: integer
+                  size:
+                    type: integer
+                  number:
+                    type: integer
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /cards/{cardId}/block:
+    patch:
+      tags:
+        - Cards
+      summary: Block card
+      description: Block a specific card
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: cardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Card blocked successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Card not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /transfers:
+    post:
+      tags:
+        - Transfers
+      summary: Transfer between own cards
+      description: Transfer funds between user's own cards
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+      responses:
+        '200':
+          description: Transfer initiated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: Insufficient funds or invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /transfers/{transferId}:
+    get:
+      tags:
+        - Transfers
+      summary: Get transfer details
+      description: Retrieve details of a specific transfer
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: transferId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Transfer details retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Transfer not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /admin/users:
+    get:
+      tags:
+        - Admin
+      summary: Get all users
+      description: Admin only endpoint to retrieve all users
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Users retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
