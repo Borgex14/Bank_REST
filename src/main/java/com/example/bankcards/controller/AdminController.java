@@ -25,6 +25,7 @@ public class AdminController {
     @GetMapping("/users")
     @Operation(summary = "Get all users", description = "Admin only endpoint")
     public ResponseEntity<List<UserResponse>> getAllUsers() {
-        return ResponseEntity.ok(List.of());
+        List<UserResponse> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 }

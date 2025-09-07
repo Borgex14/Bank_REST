@@ -1,0 +1,74 @@
+-------------------------------------------------------------------------------
+Test set: com.example.bankcards.controller.CardControllerTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 1, Errors: 3, Skipped: 0, Time elapsed: 0.464 s <<< FAILURE! -- in com.example.bankcards.controller.CardControllerTest
+com.example.bankcards.controller.CardControllerTest.createCard_AsAdmin_ShouldReturnCardResponse -- Time elapsed: 0.016 s <<< ERROR!
+org.mockito.exceptions.misusing.CannotStubVoidMethodWithReturnValue: 
+
+'init' is a *void method* and it *cannot* be stubbed with a *return value*!
+Voids are usually stubbed with Throwables:
+    doThrow(exception).when(mock).someVoidMethod();
+If you need to set the void method to do nothing you can use:
+    doNothing().when(mock).someVoidMethod();
+For more information, check out the javadocs for Mockito.doNothing().
+***
+If you're unsure why you're getting above error read on.
+Due to the nature of the syntax above problem might occur because:
+1. The method you are trying to stub is *overloaded*. Make sure you are calling the right overloaded version.
+2. Somewhere in your test you are stubbing *final methods*. Sorry, Mockito does not verify/stub final methods.
+3. A spy is stubbed using when(spy.foo()).then() syntax. It is safer to stub spies - 
+   - with doReturn|Throw() family of methods. More in javadocs for Mockito.spy() method.
+4. Mocking methods declared on non-public parent classes is not supported.
+
+	at com.example.bankcards.controller.CardControllerTest.createCard_AsAdmin_ShouldReturnCardResponse(CardControllerTest.java:44)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+com.example.bankcards.controller.CardControllerTest.createCard_AsUser_ShouldReturnForbidden -- Time elapsed: 0.047 s <<< FAILURE!
+java.lang.AssertionError: Status expected:<403> but was:<200>
+	at org.springframework.test.util.AssertionErrors.fail(AssertionErrors.java:59)
+	at org.springframework.test.util.AssertionErrors.assertEquals(AssertionErrors.java:122)
+	at org.springframework.test.web.servlet.result.StatusResultMatchers.lambda$matcher$9(StatusResultMatchers.java:637)
+	at org.springframework.test.web.servlet.MockMvc$1.andExpect(MockMvc.java:214)
+	at com.example.bankcards.controller.CardControllerTest.createCard_AsUser_ShouldReturnForbidden(CardControllerTest.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+com.example.bankcards.controller.CardControllerTest.getUserCards_ShouldReturnPageOfCards -- Time elapsed: 0.016 s <<< ERROR!
+org.mockito.exceptions.misusing.MissingMethodInvocationException: 
+
+when() requires an argument which has to be 'a method call on a mock'.
+For example:
+    when(mock.getArticles()).thenReturn(articles);
+
+Also, this error might show up because:
+1. you stub either of: final/private/equals()/hashCode() methods.
+   Those methods *cannot* be stubbed/verified.
+   Mocking methods declared on non-public parent classes is not supported.
+2. inside when() you don't call method on mock but on some other object.
+
+	at com.example.bankcards.controller.CardControllerTest.getUserCards_ShouldReturnPageOfCards(CardControllerTest.java:66)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+com.example.bankcards.controller.CardControllerTest.blockCard_ShouldReturnCardResponse -- Time elapsed: 0 s <<< ERROR!
+org.mockito.exceptions.misusing.MissingMethodInvocationException: 
+
+when() requires an argument which has to be 'a method call on a mock'.
+For example:
+    when(mock.getArticles()).thenReturn(articles);
+
+Also, this error might show up because:
+1. you stub either of: final/private/equals()/hashCode() methods.
+   Those methods *cannot* be stubbed/verified.
+   Mocking methods declared on non-public parent classes is not supported.
+2. inside when() you don't call method on mock but on some other object.
+
+	at com.example.bankcards.controller.CardControllerTest.blockCard_ShouldReturnCardResponse(CardControllerTest.java:85)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
