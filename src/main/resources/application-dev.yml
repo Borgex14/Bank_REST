@@ -16,8 +16,5 @@ spring:
       enabled: true
       path: /h2-console
 
-jwt:
-  secret-key: your-256-bit-secret-key-here-for-development
-
 encryption:
   key: dev-encryption-key-32-bytes-here

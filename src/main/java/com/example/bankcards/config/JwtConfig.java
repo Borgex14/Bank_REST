@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.crypto.SecretKey;
+import java.util.Base64;
 
 @Configuration
 public class JwtConfig {
@@ -22,8 +23,30 @@ public class JwtConfig {
 
     @Bean
     public SecretKey secretKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
+        try {
+            if (!isValidBase64(secretKey)) {
+                throw new IllegalArgumentException("Invalid Base64 secret key");
+            }
+
+            byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+
+            if (keyBytes.length < 32) {
+                throw new IllegalArgumentException("JWT secret key must be at least 256 bits (32 bytes)");
+            }
+
+            return Keys.hmacShaKeyFor(keyBytes);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Failed to create secret key: " + e.getMessage(), e);
+        }
+    }
+
+    private boolean isValidBase64(String value) {
+        try {
+            Base64.getDecoder().decode(value);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     public long getJwtExpiration() {

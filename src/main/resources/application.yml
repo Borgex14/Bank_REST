@@ -13,7 +13,10 @@ spring:
         format_sql: true
 
 jwt:
+  secret-key: "dGhpcy1pcy1hLXN1cGVyLXNlY3JldC1rZXktZm9yLWRldmVsb3BtZW50"
   expiration: 86400000
+  refresh-token:
+    expiration: 604800000
 
 springdoc:
   api-docs:
