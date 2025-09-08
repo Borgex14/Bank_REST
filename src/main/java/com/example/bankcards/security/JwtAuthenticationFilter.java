@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -23,6 +24,34 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        String contextPath = request.getContextPath();
+        String requestURI = request.getRequestURI();
+
+        logger.info("ServletPath: " + path);
+        logger.info("ContextPath: " + contextPath);
+        logger.info("RequestURI: " + requestURI);
+
+        boolean shouldNotFilter = path.startsWith("/api/auth/") ||
+                path.startsWith("/api/swagger-ui/") ||
+                path.startsWith("/api/v3/api-docs/") ||
+                path.startsWith("/swagger-ui/") ||
+                path.startsWith("/v3/api-docs/") ||
+                path.startsWith("/swagger-resources/") ||
+                path.startsWith("/webjars/") ||
+                path.startsWith("/h2-console/") ||
+                path.startsWith("/actuator/") ||           // ← Все Actuator эндпоинты
+                path.startsWith("/actuator/health") ||     // ← Конкретно health
+                path.equals("/error") ||
+                path.equals("/swagger-ui.html") ||
+                path.equals("/api/swagger-ui.html");
+
+        logger.info("shouldNotFilter: " + shouldNotFilter);
+        return shouldNotFilter;
+    }
 
     @Override
     protected void doFilterInternal(

@@ -1,8 +1,10 @@
+C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\config\CustomInfoContributor.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\BankRestApplication.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\dto\request\LoginRequest.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\dto\request\TransferRequest.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\service\CardService.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\controller\AdminController.java
+C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\dto\response\AuthResponse.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\service\TransferService.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\service\impl\AuthServiceImpl.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\controller\TransferController.java
@@ -11,6 +13,7 @@ C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\entity\
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\dto\request\PasswordChangeRequest.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\service\impl\JwtServiceImpl.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\controller\AuthController.java
+C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\dto\request\AuthRequest.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\service\impl\TransferServiceImpl.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\dto\request\RefreshTokenRequest.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\config\SecurityConfig.java

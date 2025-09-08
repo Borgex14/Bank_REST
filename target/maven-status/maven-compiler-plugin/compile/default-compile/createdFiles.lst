@@ -9,6 +9,7 @@ com\example\bankcards\util\CardNumberGenerator.class
 com\example\bankcards\dto\request\CardFilterRequest.class
 com\example\bankcards\controller\CardController.class
 com\example\bankcards\repository\spec\CardSpecification.class
+com\example\bankcards\dto\request\AuthRequest.class
 com\example\bankcards\exception\InsufficientFundsException.class
 com\example\bankcards\service\impl\UserServiceImpl.class
 com\example\bankcards\dto\request\TransferRequest.class
@@ -57,9 +58,11 @@ com\example\bankcards\entity\enums\CardStatus.class
 com\example\bankcards\config\ApplicationConfig.class
 com\example\bankcards\dto\response\JwtResponse$JwtResponseBuilder.class
 com\example\bankcards\dto\request\CardCreateRequest.class
+com\example\bankcards\dto\response\AuthResponse.class
 com\example\bankcards\dto\response\JwtResponse.class
 com\example\bankcards\service\impl\TransferServiceImpl.class
 com\example\bankcards\service\impl\JwtServiceImpl.class
+com\example\bankcards\config\CustomInfoContributor.class
 com\example\bankcards\dto\response\ApiError$FieldError.class
 com\example\bankcards\security\UserDetailsServiceImpl.class
 com\example\bankcards\dto\response\TransactionResponse.class
