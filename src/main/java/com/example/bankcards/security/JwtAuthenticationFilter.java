@@ -27,27 +27,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getServletPath();
-        String contextPath = request.getContextPath();
         String requestURI = request.getRequestURI();
 
-        logger.info("ServletPath: " + path);
-        logger.info("ContextPath: " + contextPath);
         logger.info("RequestURI: " + requestURI);
 
-        boolean shouldNotFilter = path.startsWith("/api/auth/") ||
-                path.startsWith("/api/swagger-ui/") ||
-                path.startsWith("/api/v3/api-docs/") ||
-                path.startsWith("/swagger-ui/") ||
-                path.startsWith("/v3/api-docs/") ||
-                path.startsWith("/swagger-resources/") ||
-                path.startsWith("/webjars/") ||
-                path.startsWith("/h2-console/") ||
-                path.startsWith("/actuator/") ||           // ← Все Actuator эндпоинты
-                path.startsWith("/actuator/health") ||     // ← Конкретно health
-                path.equals("/error") ||
-                path.equals("/swagger-ui.html") ||
-                path.equals("/api/swagger-ui.html");
+        boolean shouldNotFilter = requestURI.equals("/api/") ||
+                requestURI.equals("/api") ||
+                requestURI.startsWith("/api/auth/") ||
+                requestURI.startsWith("/api/swagger-ui/") ||
+                requestURI.startsWith("/api/v3/api-docs/") ||
+                requestURI.startsWith("/swagger-ui/") ||
+                requestURI.startsWith("/v3/api-docs/") ||
+                requestURI.startsWith("/swagger-resources/") ||
+                requestURI.startsWith("/webjars/") ||
+                requestURI.startsWith("/api/h2-console/") ||
+                requestURI.startsWith("/api/actuator/") ||
+                requestURI.equals("/error") ||
+                requestURI.equals("/swagger-ui.html") ||
+                requestURI.equals("/api/swagger-ui.html");
 
         logger.info("shouldNotFilter: " + shouldNotFilter);
         return shouldNotFilter;

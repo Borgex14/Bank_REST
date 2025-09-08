@@ -23,6 +23,7 @@ C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\securit
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\config\OpenApiConfig.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\entity\enums\CardType.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\config\EncryptionConfig.java
+C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\config\RequestLoggingFilter.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\dto\response\CardResponse.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\util\CardNumberGenerator.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\dto\response\JwtResponse.java
@@ -44,6 +45,7 @@ C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\dto\req
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\config\JwtConfig.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\dto\response\UserResponse.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\service\impl\UserServiceImpl.java
+C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\controller\HomeController.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\dto\response\BalanceResponse.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\util\CardNumberMasker.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\config\JpaAuditingConfig.java

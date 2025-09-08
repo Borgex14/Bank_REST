@@ -73,9 +73,11 @@ com\example\bankcards\exception\ResourceNotFoundException.class
 com\example\bankcards\BankRestApplication.class
 com\example\bankcards\dto\response\CardResponse$CardResponseBuilder.class
 com\example\bankcards\entity\enums\TransactionStatus.class
+com\example\bankcards\controller\HomeController.class
 com\example\bankcards\exception\CardOperationException.class
 com\example\bankcards\config\EncryptionConfig.class
 com\example\bankcards\config\CorsConfig.class
 com\example\bankcards\util\CardNumberMasker.class
 com\example\bankcards\service\JwtService.class
 com\example\bankcards\entity\Card.class
+com\example\bankcards\config\RequestLoggingFilter.class
