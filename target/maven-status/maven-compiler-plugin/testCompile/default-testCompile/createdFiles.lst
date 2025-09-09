@@ -1,7 +1,0 @@
-com\example\bankcards\controller\TransferControllerTest.class
-com\example\bankcards\controller\AdminControllerTest.class
-com\example\bankcards\service\impl\CardServiceImplTest.class
-com\example\bankcards\controller\AuthControllerTest.class
-com\example\bankcards\controller\AbstractControllerTest.class
-com\example\bankcards\controller\CardControllerTest.class
-com\example\bankcards\BankRestApplicationTest.class
