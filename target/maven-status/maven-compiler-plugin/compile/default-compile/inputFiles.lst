@@ -28,7 +28,6 @@ C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\dto\res
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\util\CardNumberGenerator.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\dto\response\JwtResponse.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\entity\User.java
-C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\config\CorsConfig.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\dto\request\CardFilterRequest.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\repository\TransactionRepository.java
 C:\Users\Ageu\IdeaProjects\Bank_REST\src\main\java\com\example\bankcards\exception\AuthenticationException.java

@@ -29,10 +29,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
 
-        logger.info("RequestURI: " + requestURI);
-
-        boolean shouldNotFilter = requestURI.equals("/api/") ||
+        boolean shouldNotFilter = requestURI.equals("/") ||
                 requestURI.equals("/api") ||
+                requestURI.equals("/api/") ||
+                requestURI.equals("/favicon.ico") ||
                 requestURI.startsWith("/api/auth/") ||
                 requestURI.startsWith("/api/swagger-ui/") ||
                 requestURI.startsWith("/api/v3/api-docs/") ||
@@ -46,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 requestURI.equals("/swagger-ui.html") ||
                 requestURI.equals("/api/swagger-ui.html");
 
-        logger.info("shouldNotFilter: " + shouldNotFilter);
+        logger.info("RequestURI: " + requestURI + ", shouldNotFilter: " + shouldNotFilter);
         return shouldNotFilter;
     }
 

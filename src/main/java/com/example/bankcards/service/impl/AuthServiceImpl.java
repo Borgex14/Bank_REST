@@ -38,13 +38,15 @@ public class AuthServiceImpl implements AuthService {
             throw new AuthenticationException("Email already exists");
         }
 
+        Role role = userRepository.count() == 0 ? Role.ADMIN : Role.USER;
+
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
-                .role(Role.USER)
+                .role(role)
                 .createdAt(LocalDateTime.now())
                 .isActive(true)
                 .build();
@@ -56,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
         return JwtResponse.builder()
                 .accessToken(jwt)
                 .tokenType("Bearer")
-                .expiresIn(jwtService.getJwtExpiration() / 1000) // в секундах
+                .expiresIn(jwtService.getJwtExpiration() / 1000)
                 .user(JwtResponse.UserInfo.builder()
                         .id(savedUser.getId())
                         .username(savedUser.getUsername())
