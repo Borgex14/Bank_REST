@@ -1,6 +1,7 @@
 package com.example.bankcards.dto.request;
 
 import com.example.bankcards.entity.enums.CardType;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -25,5 +26,7 @@ public class CardCreateRequest {
     @Size(min = 3, max = 3, message = "Currency must be 3 characters")
     private String currency;
 
+    @NotNull(message = "Initial balance is required")
+    @DecimalMin(value = "0.0", message = "Initial balance must be positive")
     private BigDecimal initialBalance;
 }

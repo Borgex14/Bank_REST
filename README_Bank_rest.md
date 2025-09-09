@@ -219,30 +219,17 @@ curl -X POST "http://localhost:8080/api/auth/login" -H "Content-Type: applicatio
 Аутентификация
 Logout
 bash
-curl -X POST "http://localhost:8080/api/auth/logout" \
--H "Authorization: Bearer <jwt-token>"
+curl -X POST "http://localhost:8080/api/auth/logout" -H "Authorization: Bearer <jwt-token>"
 Создание карты (требует админ права)
 bash
-curl -X POST "http://localhost:8080/api/cards" \
--H "Authorization: Bearer <jwt-token>" \
--H "Content-Type: application/json" \
--d '{
-"cardHolderName": "JOHN DOE",
-"type": "DEBIT",
-"currency": "USD",
-"initialBalance": 1000.00
-}'
+curl -X POST "http://localhost:8080/api/cards" -H "Authorization: Bearer <jwt-token>" -H "Content-Type: application/json" -d "{ \"cardHolderName\": \"JOHN DOE\", \"type\": \"DEBIT\", \"currency\": \"USD\", \"initialBalance\": 1000.00 }"
 Получить детали карты
 bash
-curl -X GET "http://localhost:8080/api/cards" \
--H "Authorization: Bearer <jwt-token>"
+curl -X GET "http://localhost:8080/api/cards" -H "Authorization: Bearer <jwt-token>"
 Переводы
 Создать перевод между своими картами
 bash
-curl -X POST "http://localhost:8080/api/transfers" \
--H "Authorization: Bearer <jwt-token>" \
--H "Content-Type: application/json" \
--d '{
+curl -X POST "http://localhost:8080/api/transfers" -H "Authorization: Bearer <jwt-token>" -H "Content-Type: application/json" -d '{
 "fromCardId": 1,
 "toCardId": 2,
 "amount": 500.00,
@@ -251,12 +238,10 @@ curl -X POST "http://localhost:8080/api/transfers" \
 }'
 Получить детали перевода
 bash
-curl -X GET "http://localhost:8080/api/transfers/1" \
--H "Authorization: Bearer <jwt-token>"
+curl -X GET "http://localhost:8080/api/transfers/1" -H "Authorization: Bearer <jwt-token>"
 Заблокировать карту
 bash
-curl -X PATCH "http://localhost:8080/api/cards/1/block" \
--H "Authorization: Bearer <jwt-token>"
+curl -X PATCH "http://localhost:8080/api/cards/1/block" -H "Authorization: Bearer <jwt-token>"
 Администрирование
 Получить всех пользователей (только для админов)
 bash

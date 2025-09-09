@@ -14,6 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -44,6 +47,7 @@ class CardServiceImplTest {
         request.setCardHolderName("John Doe");
         request.setCurrency("USD");
         request.setType(CardType.DEBIT);
+        request.setInitialBalance(new BigDecimal("1000.00"));
 
         when(userService.findByUsername("testuser")).thenReturn(user);
         when(encryptionConfig.encrypt(any())).thenReturn("encrypted");

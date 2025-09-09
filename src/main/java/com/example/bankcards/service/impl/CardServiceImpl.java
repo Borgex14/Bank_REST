@@ -22,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Service
@@ -38,6 +40,14 @@ public class CardServiceImpl implements CardService {
     public CardResponse createCard(CardCreateRequest request, String username) {
         User user = userService.findByUsername(username);
 
+        if (request.getInitialBalance() == null) {
+            throw new CardOperationException("Initial balance is required");
+        }
+
+        if (request.getInitialBalance().compareTo(BigDecimal.ZERO) < 0) {
+            throw new CardOperationException("Initial balance cannot be negative");
+        }
+
         String cardNumber = generateUniqueCardNumber();
 
         Card card = Card.builder()
@@ -45,13 +55,15 @@ public class CardServiceImpl implements CardService {
                 .cardHolderName(request.getCardHolderName())
                 .expirationDate(LocalDate.now().plusYears(3))
                 .cvv(encryptionConfig.encrypt(generateCVV()))
+                .balance(request.getInitialBalance())
                 .currency(request.getCurrency())
                 .type(request.getType())
                 .user(user)
                 .build();
 
         Card savedCard = cardRepository.save(card);
-        log.info("Created new {} card for user: {}", request.getType(), username);
+        log.info("Created new {} card for user: {} with initial balance: {}",
+                request.getType(), username, request.getInitialBalance());
 
         return mapToResponse(savedCard);
     }
