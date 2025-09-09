@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-    private UserResponse mapToResponse(User user) {
+    UserResponse mapToResponse(User user) {
         return UserResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    private UserResponse convertToResponse(User user) {
+    UserResponse convertToResponse(User user) {
         return UserResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())

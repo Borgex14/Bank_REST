@@ -22,10 +22,10 @@ import java.util.function.Function;
 public class JwtServiceImpl implements JwtService {
 
     @Value("${jwt.secret-key}")
-    private String secretKey;
+    String secretKey;
 
     @Value("${jwt.expiration}")
-    private long jwtExpiration;
+    long jwtExpiration;
 
     private final Map<String, Date> invalidatedTokens = new ConcurrentHashMap<>();
 
@@ -133,7 +133,7 @@ public class JwtServiceImpl implements JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    private boolean isTokenInvalidated(String token) {
+    boolean isTokenInvalidated(String token) {
         return invalidatedTokens.containsKey(token);
     }
 
