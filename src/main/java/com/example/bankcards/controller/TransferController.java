@@ -19,13 +19,14 @@ import org.springframework.web.bind.annotation.*;
 public class TransferController {
 
     private final TransferService transferService;
+    private final SecurityUtils securityUtils;
 
     @PostMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Transfer between own cards")
     public ResponseEntity<TransferResponse> transfer(
             @Valid @RequestBody TransferRequest request) {
-        String username = SecurityUtils.getCurrentUsername();
+        String username = securityUtils.getCurrentUsername();
         return ResponseEntity.ok(transferService.transferBetweenOwnCards(request, username));
     }
 
@@ -33,7 +34,7 @@ public class TransferController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Get transfer details")
     public ResponseEntity<TransferResponse> getTransferDetails(@PathVariable Long transferId) {
-        String username = SecurityUtils.getCurrentUsername();
+        String username = securityUtils.getCurrentUsername();
         return ResponseEntity.ok(transferService.getTransferDetails(transferId, username));
     }
 }

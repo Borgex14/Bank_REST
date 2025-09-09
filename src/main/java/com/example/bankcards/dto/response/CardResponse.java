@@ -19,6 +19,7 @@ public class CardResponse {
     private String cardHolderName;
     private LocalDate expirationDate;
     private BigDecimal balance;
+    private Boolean isBlocked;
     private String currency;
     private CardStatus status;
     private LocalDateTime createdAt;

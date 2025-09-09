@@ -1,13 +1,17 @@
 package com.example.bankcards.controller;
 
+import com.example.bankcards.config.TestSecurityConfig;
+import com.example.bankcards.config.WebMvcConfig;
 import com.example.bankcards.dto.request.TransferRequest;
 import com.example.bankcards.dto.response.TransferResponse;
 import com.example.bankcards.entity.enums.TransactionStatus;
 import com.example.bankcards.service.TransferService;
 import com.example.bankcards.util.SecurityUtils;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 
@@ -20,6 +24,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(TransferController.class)
+@Import({TestSecurityConfig.class, WebMvcConfig.class})
+@AutoConfigureMockMvc(addFilters = false)
 class TransferControllerTest extends AbstractControllerTest {
 
     @MockBean

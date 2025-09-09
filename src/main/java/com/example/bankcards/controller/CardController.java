@@ -23,12 +23,13 @@ import org.springframework.web.bind.annotation.*;
 public class CardController {
 
     private final CardService cardService;
+    private final SecurityUtils securityUtils;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Create new card", description = "Admin only endpoint")
     public ResponseEntity<CardResponse> createCard(@Valid @RequestBody CardCreateRequest request) {
-        String username = SecurityUtils.getCurrentUsername();
+        String username = securityUtils.getCurrentUsername();
         CardResponse response = cardService.createCard(request, username);
         return ResponseEntity.ok(response);
     }
@@ -40,7 +41,7 @@ public class CardController {
             @ModelAttribute CardFilterRequest filter,
             @PageableDefault(size = 10, sort = "createdAt") Pageable pageable) {
 
-        String username = SecurityUtils.getCurrentUsername();
+        String username = securityUtils.getCurrentUsername();
         Page<CardResponse> cards = cardService.getUserCards(filter, username, pageable);
         return ResponseEntity.ok(cards);
     }
@@ -49,7 +50,7 @@ public class CardController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Block card")
     public ResponseEntity<CardResponse> blockCard(@PathVariable Long cardId) {
-        String username = SecurityUtils.getCurrentUsername();
+        String username = securityUtils.getCurrentUsername();
         CardResponse response = cardService.blockCard(cardId, username);
         return ResponseEntity.ok(response);
     }
