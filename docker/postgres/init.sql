@@ -1,20 +1,10 @@
--- Простые тестовые таблицы
-CREATE TABLE IF NOT EXISTS users (
-    id BIGSERIAL PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    first_name VARCHAR(50),
-    last_name VARCHAR(50),
-    role VARCHAR(20) NOT NULL,
-    is_active BOOLEAN DEFAULT true,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+-- docker/postgres/init.sql
+CREATE DATABASE card_db;
 
-CREATE TABLE IF NOT EXISTS test_table (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100),
-    created_at TIMESTAMP DEFAULT NOW()
-);
+\c card_db;
 
-INSERT INTO test_table (name) VALUES ('database initialized');
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+-- Grant privileges
+GRANT ALL PRIVILEGES ON DATABASE card_db TO postgres;
