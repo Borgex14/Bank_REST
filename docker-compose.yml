@@ -7,11 +7,17 @@ services:
       POSTGRES_DB: card_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
+      POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d card_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     networks:
       - card-network
 
@@ -21,19 +27,26 @@ services:
       dockerfile: Dockerfile
     container_name: card_manager_app
     ports:
-      - "8081:8080"
+      - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/card_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: password
-      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-min-256-bits-here}
+      JWT_SECRET: ${JWT_SECRET:-dGhpcy1pcy1hLXN1cGVyLXNlY3JldC1rZXktZm9yLWRldmVsb3BtZW50}
       ENCRYPTION_KEY: ${ENCRYPTION_KEY:-your-32-byte-encryption-key-here}
+      JAVA_OPTS: "-Xmx512m -Xms256m"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     networks:
       - card-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 volumes:
   postgres_data:
