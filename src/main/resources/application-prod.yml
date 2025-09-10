@@ -25,7 +25,7 @@ spring:
     open-in-view: false
 
   liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.yaml
+    change-log: classpath:db/changelog/db.db.changelog-master.yaml
     enabled: true
     default-schema: public
 
