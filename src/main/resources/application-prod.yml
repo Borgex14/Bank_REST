@@ -1,7 +1,7 @@
 spring:
   config:
     activate:
-      on-profile: docker
+      on-profile: prod
   datasource:
     url: jdbc:postgresql://postgres:5432/card_db
     username: postgres
