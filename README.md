@@ -1,6 +1,5 @@
 # Система управления банковскими картами
-
-📋 Оглавление
+# 📋 Оглавление
 Описание проекта
 
 Функциональность
@@ -19,11 +18,11 @@ API Документация
 
 Разработчики
 
-🎯 Описание проекта
+# 🎯 Описание проекта
 RESTful API для управления банковскими картами, пользователями и денежными переводами. Система предоставляет полный цикл работы с банковскими картами включая создание, блокировку, переводы между картами и административное управление.
 
-✨ Функциональность
-🔐 Аутентификация и авторизация
+# ✨ Функциональность
+# 🔐 Аутентификация и авторизация
 Регистрация новых пользователей
 
 JWT аутентификация
@@ -32,7 +31,7 @@ JWT аутентификация
 
 Выход из системы с инвалидацией токенов
 
-💳 Управление картами
+# 💳 Управление картами
 Создание карт (DEBIT, CREDIT, PREPAID, VIRTUAL)
 
 Просмотр списка карт с фильтрацией и пагинацией
@@ -43,7 +42,7 @@ JWT аутентификация
 
 Автоматическая генерация номеров карт
 
-💸 Денежные переводы
+# 💸 Денежные переводы
 Переводы между собственными картами
 
 История транзакций
@@ -52,14 +51,14 @@ JWT аутентификация
 
 Валидация операций
 
-👨‍💼 Административные функции
+# 👨‍💼 Административные функции
 Просмотр всех пользователей
 
 Управление картами пользователей
 
 Мониторинг транзакций
 
-🛠 Технологии
+# 🛠 Технологии
 Backend
 Java 17 - основной язык программирования
 
@@ -92,7 +91,7 @@ JWT - токены аутентификации
 
 HTTPS Ready - готова к использованию HTTPS
 
-📋 Требования
+# 📋 Требования
 Системные требования
 Java 17 или выше
 
@@ -113,7 +112,8 @@ JAVA_HOME=/path/to/java17
 DATABASE_URL=jdbc:postgresql://localhost:5432/bankdb
 DATABASE_USERNAME=bankuser
 DATABASE_PASSWORD=bankpassword
-🚀 Установка и запуск
+
+# 🚀 Установка и запуск
 1. Клонирование репозитория
    bash
    git clone <repository-url>
@@ -123,6 +123,7 @@ DATABASE_PASSWORD=bankpassword
    Автоматически настраивается, данные хранятся в памяти.
 
 Для production (PostgreSQL):
+
 bash
 # Создание базы данных
 createdb bankdb
@@ -134,8 +135,9 @@ createuser bankuser -P
 # Настройка прав
 psql -c "GRANT ALL PRIVILEGES ON DATABASE bankdb TO bankuser;"
 3. Настройка конфигурации
+   application-dev.yml:
 
-properties
+yaml
 spring:
 config:
 activate:
@@ -153,26 +155,33 @@ h2:
 console:
 enabled: true
 path: /h2-console
+settings:
+web-allow-others: true
 
 encryption:
 key: dev-encryption-key-32-bytes-here
 4. Сборка проекта
    С помощью Maven:
-   bash
-   mvn clean package
-   С помощью Gradle:
-   bash
-   ./gradlew build
+
+bash
+mvn clean package
+С помощью Gradle:
+
+bash
+./gradlew build
 5. Запуск приложения
    Разработка:
-   bash
-   mvn spring-boot:run
-   Production:
-   bash
-   java -jar target/card-manager-1.0.0.jar
-   С профилем production:
-   bash
-   java -jar target/card-manager-1.0.0.jar --spring.profiles.active=prod
+
+bash
+mvn spring-boot:run
+Production:
+
+bash
+java -jar target/card-manager-1.0.0.jar
+С профилем production:
+
+bash
+java -jar target/card-manager-1.0.0.jar --spring.profiles.active=prod
 6. Проверка работоспособности
    После запуска откройте в браузере:
 
@@ -182,71 +191,97 @@ H2 Console: http://localhost:8080/h2-console (только для разрабо
 
 Health Check: http://localhost:8080/actuator/health
 
-📖 API Документация
+# 📖 API Документация
 Базовый URL
 text
 http://localhost:8080/api
 Аутентификация
 Все запросы (кроме аутентификации) требуют JWT токен в заголовке:
 
-http
+text
 Authorization: Bearer <your-jwt-token>
 Основные endpoints
-🔐 Аутентификация
-http
-POST /auth/register
-POST /auth/login
-POST /auth/logout
-💳 Карты
-http
-GET  /cards
-POST /cards
-PATCH /cards/{id}/block
-💸 Переводы
-http
-POST /transfers
-GET  /transfers/{id}
-👨‍💼 Администрирование
-http
-GET /admin/users
-Примеры запросов
+# 🔐 Аутентификация
+text
+POST /auth/register  - Регистрация пользователя
+POST /auth/login     - Вход в систему
+POST /auth/logout    - Выход из системы
+# 💳 Карты
+text
+GET  /cards          - Получение карт пользователя
+POST /cards          - Создание новой карты (ADMIN only)
+PATCH /cards/{id}/block - Блокировка карты
+# 💸 Переводы
+text
+POST /transfers      - Перевод между картами
+GET  /transfers/{id} - Получение деталей перевода
+# 👨‍💼 Администрирование
+text
+GET /admin/users     - Получение всех пользователей (ADMIN only)
+# Примеры запросов
 Регистрация пользователя
 bash
-curl -X POST "http://localhost:8080/api/auth/register" -H "Content-Type: application/json" -d "{ \"username\": \"john_doe\", \"password\": \"password123\", \"email\": \"test@example.com\", \"firstName\": \"John\", \"lastName\": \"Doe\" }"
+curl -X POST "http://localhost:8080/api/auth/register" \
+-H "Content-Type: application/json" \
+-d '{
+"username": "john_doe",
+"password": "password123",
+"email": "test@example.com",
+"firstName": "John",
+"lastName": "Doe"
+}'
 Вход в систему
 bash
-curl -X POST "http://localhost:8080/api/auth/login" -H "Content-Type: application/json" -d "{ \"username\": \"john_doe\", \"password\": \"password123\" }"
-Аутентификация
-Logout
+curl -X POST "http://localhost:8080/api/auth/login" \
+-H "Content-Type: application/json" \
+-d '{
+"username": "john_doe",
+"password": "password123"
+}'
+Выход из системы
 bash
-curl -X POST "http://localhost:8080/api/auth/logout" -H "Authorization: Bearer <jwt-token>"
-Создание карты (требует админ права)
+curl -X POST "http://localhost:8080/api/auth/logout" \
+-H "Authorization: Bearer <jwt-token>"
+Создание карты (ADMIN only)
 bash
-curl -X POST "http://localhost:8080/api/cards" -H "Authorization: Bearer <jwt-token>" -H "Content-Type: application/json" -d "{ \"cardHolderName\": \"JOHN DOE\", \"type\": \"DEBIT\", \"currency\": \"USD\", \"initialBalance\": 1000.00 }"
-Получить детали карты
+curl -X POST "http://localhost:8080/api/cards" \
+-H "Authorization: Bearer <jwt-token>" \
+-H "Content-Type: application/json" \
+-d '{
+"cardHolderName": "JOHN DOE",
+"type": "DEBIT",
+"currency": "USD",
+"initialBalance": 1000.00
+}'
+Получение карт пользователя
 bash
-curl -X GET "http://localhost:8080/api/cards" -H "Authorization: Bearer <jwt-token>"
-Переводы
-Создать перевод между своими картами
+curl -X GET "http://localhost:8080/api/cards" \
+-H "Authorization: Bearer <jwt-token>"
+Перевод между картами
 bash
-curl -X POST "http://localhost:8080/api/transfers" -H "Authorization: Bearer <jwt-token>" -H "Content-Type: application/json" -d '{
+curl -X POST "http://localhost:8080/api/transfers" \
+-H "Authorization: Bearer <jwt-token>" \
+-H "Content-Type: application/json" \
+-d '{
 "fromCardId": 1,
 "toCardId": 2,
 "amount": 500.00,
 "currency": "USD",
 "description": "Monthly savings transfer"
 }'
-Получить детали перевода
+Получение деталей перевода
 bash
-curl -X GET "http://localhost:8080/api/transfers/1" -H "Authorization: Bearer <jwt-token>"
-Заблокировать карту
+curl -X GET "http://localhost:8080/api/transfers/1" \
+-H "Authorization: Bearer <jwt-token>"
+Блокировка карты
 bash
-curl -X PATCH "http://localhost:8080/api/cards/1/block" -H "Authorization: Bearer <jwt-token>"
-Администрирование
-Получить всех пользователей (только для админов)
+curl -X PATCH "http://localhost:8080/api/cards/1/block" \
+-H "Authorization: Bearer <jwt-token>"
+Получение всех пользователей (ADMIN only)
 bash
-curl -X GET "http://localhost:8080/api/admin/users" -H "Authorization: Bearer YOUR_ADMIN_TOKEN_HERE" -H "Content-Type: application/json"
-🗄️ База данных
+curl -X GET "http://localhost:8080/api/admin/users" \
+-H "Authorization: Bearer <admin-jwt-token>"
+# 🗄️ База данных
 Диаграмма базы данных
 text
 users
@@ -291,7 +326,7 @@ transactions
 Миграции базы данных
 Приложение использует автоматическое создание схемы через Hibernate. Для production рекомендуется использовать Liquibase или Flyway.
 
-🔒 Безопасность
+# 🔒 Безопасность
 Меры безопасности
 Хеширование паролей - BCrypt с salt
 
@@ -305,7 +340,7 @@ SQL инъекции - защита через JPA
 
 XSS - валидация входных данных
 
-Ролевая модель
+# Ролевая модель
 USER - базовые операции с картами и переводами
 
 ADMIN - полный доступ ко всем функциям
@@ -319,7 +354,7 @@ Best Practices
 
 Мониторинг и логирование security событий
 
-🧪 Тестирование
+# 🧪 Тестирование
 Запуск тестов
 bash
 mvn test
@@ -332,17 +367,17 @@ Unit тесты сервисов
 
 Тесты валидации
 
-📊 Мониторинг
+# 📊 Мониторинг
 Health check
-http
+text
 GET /actuator/health
 Metrics
-http
+text
 GET /actuator/metrics
 Интеграция с Prometheus/Grafana
 Готова к настройке метрик для мониторинга.
 
-🚀 Deployment
+# 🚀 Deployment
 Docker контейнеризация
 dockerfile
 FROM openjdk:17-jdk-slim
@@ -351,20 +386,20 @@ ENTRYPOINT ["java","-jar","/app.jar"]
 Kubernetes развертывание
 Готовы манифесты для развертывания в Kubernetes кластере.
 
-🐛 Troubleshooting
+# 🐛 Troubleshooting
 Common issues
-Port already in use
+Port already in use:
 
 bash
 netstat -tulpn | grep :8080
 kill <process-id>
-Database connection issues
+Database connection issues:
 
 Проверьте настройки базы данных
 
 Убедитесь, что PostgreSQL запущен
 
-JWT errors
+JWT errors:
 
 Проверьте secret key в настройках
 
@@ -373,7 +408,7 @@ JWT errors
 Логирование
 Логи находятся в logs/application.log и выводятся в консоль.
 
-📞 Поддержка
+# 📞 Поддержка
 Документация
 Spring Boot Documentation
 
@@ -386,7 +421,7 @@ Stack Overflow с тегами java, spring-boot, jwt
 
 GitHub Issues для багрепортов
 
-👥 Разработчики
+# 👥 Разработчики
 Backend Developer - Ажеу
 
 Security Specialist - Ажеу
@@ -396,7 +431,7 @@ Database Administrator - Ажеу
 Вклад в проект
 Мы приветствуем contributions! Пожалуйста, читайте CONTRIBUTING.md для деталей.
 
-📄 Лицензия
+# 📄 Лицензия
 Этот проект лицензирован под MIT License - смотрите LICENSE.md файл для деталей.
 
 Примечание: Это production-ready система, но перед развертыванием в продакшене обязательно:
