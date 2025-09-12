@@ -45,13 +45,10 @@ class UserServiceImplTest {
 
     @Test
     void getCurrentUser_ValidUsername_ReturnsUserResponse() {
-        // Arrange
         when(userRepository.findByUsername("testuser")).thenReturn(Optional.of(testUser));
 
-        // Act
         UserResponse response = userService.getCurrentUser("testuser");
 
-        // Assert
         assertNotNull(response);
         assertEquals(1L, response.getId());
         assertEquals("testuser", response.getUsername());
@@ -60,10 +57,8 @@ class UserServiceImplTest {
 
     @Test
     void getCurrentUser_UserNotFound_ThrowsException() {
-        // Arrange
         when(userRepository.findByUsername("nonexistent")).thenReturn(Optional.empty());
 
-        // Act & Assert
         assertThrows(ResourceNotFoundException.class, () -> {
             userService.getCurrentUser("nonexistent");
         });
@@ -71,23 +66,18 @@ class UserServiceImplTest {
 
     @Test
     void findByUsername_ValidUsername_ReturnsUser() {
-        // Arrange
         when(userRepository.findByUsername("testuser")).thenReturn(Optional.of(testUser));
 
-        // Act
         User result = userService.findByUsername("testuser");
 
-        // Assert
         assertNotNull(result);
         assertEquals("testuser", result.getUsername());
     }
 
     @Test
     void findByUsername_UserNotFound_ThrowsException() {
-        // Arrange
         when(userRepository.findByUsername("nonexistent")).thenReturn(Optional.empty());
 
-        // Act & Assert
         assertThrows(ResourceNotFoundException.class, () -> {
             userService.findByUsername("nonexistent");
         });
@@ -95,23 +85,18 @@ class UserServiceImplTest {
 
     @Test
     void findById_ValidId_ReturnsUser() {
-        // Arrange
         when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
 
-        // Act
         User result = userService.findById(1L);
 
-        // Assert
         assertNotNull(result);
         assertEquals(1L, result.getId());
     }
 
     @Test
     void findById_UserNotFound_ThrowsException() {
-        // Arrange
         when(userRepository.findById(999L)).thenReturn(Optional.empty());
 
-        // Act & Assert
         assertThrows(ResourceNotFoundException.class, () -> {
             userService.findById(999L);
         });
@@ -119,31 +104,24 @@ class UserServiceImplTest {
 
     @Test
     void existsByUsername_UserExists_ReturnsTrue() {
-        // Arrange
         when(userRepository.existsByUsername("testuser")).thenReturn(true);
 
-        // Act
         boolean exists = userService.existsByUsername("testuser");
 
-        // Assert
         assertTrue(exists);
     }
 
     @Test
     void existsByUsername_UserNotExists_ReturnsFalse() {
-        // Arrange
         when(userRepository.existsByUsername("nonexistent")).thenReturn(false);
 
-        // Act
         boolean exists = userService.existsByUsername("nonexistent");
 
-        // Assert
         assertFalse(exists);
     }
 
     @Test
     void getAllUsers_ReturnsListOfUserResponses() {
-        // Arrange
         User user2 = new User();
         user2.setId(2L);
         user2.setUsername("user2");
@@ -156,10 +134,8 @@ class UserServiceImplTest {
 
         when(userRepository.findAll()).thenReturn(List.of(testUser, user2));
 
-        // Act
         List<UserResponse> responses = userService.getAllUsers();
 
-        // Assert
         assertNotNull(responses);
         assertEquals(2, responses.size());
         assertEquals("testuser", responses.get(0).getUsername());
@@ -168,23 +144,18 @@ class UserServiceImplTest {
 
     @Test
     void getAllUsers_EmptyList_ReturnsEmptyList() {
-        // Arrange
         when(userRepository.findAll()).thenReturn(List.of());
 
-        // Act
         List<UserResponse> responses = userService.getAllUsers();
 
-        // Assert
         assertNotNull(responses);
         assertTrue(responses.isEmpty());
     }
 
     @Test
     void mapToResponse_ConvertsUserToResponseCorrectly() {
-        // Act
         UserResponse response = userService.mapToResponse(testUser);
 
-        // Assert
         assertEquals(1L, response.getId());
         assertEquals("testuser", response.getUsername());
         assertEquals("test@example.com", response.getEmail());
@@ -195,10 +166,8 @@ class UserServiceImplTest {
 
     @Test
     void convertToResponse_ConvertsUserToResponseWithRoleAndStatus() {
-        // Act
         UserResponse response = userService.convertToResponse(testUser);
 
-        // Assert
         assertEquals(1L, response.getId());
         assertEquals("testuser", response.getUsername());
         assertEquals("test@example.com", response.getEmail());

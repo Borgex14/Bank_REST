@@ -12,7 +12,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - card-network
-    healthcheck:  # Добавьте этот блок
+    healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d card_db"]
       interval: 5s
       timeout: 5s
@@ -35,7 +35,7 @@ services:
       SPRING_LIQUIBASE_ENABLED: false
     depends_on:
       postgres:
-        condition: service_healthy  # Это требует healthcheck у postgres
+        condition: service_healthy
     networks:
       - card-network
     restart: unless-stopped

@@ -36,7 +36,6 @@ management:
     info:
       enabled: true
 
-# Добавьте кастомную информацию
 info:
   app:
     name: Bank Card Manager

@@ -41,14 +41,13 @@ class AuthServiceImplTest {
 
     @Test
     void register_FirstUser_ShouldBeAdmin() {
-        // Arrange
         RegisterRequest request = new RegisterRequest(
                 "admin", "password", "admin@email.com", "John", "Doe"
         );
 
         when(userRepository.existsByUsername("admin")).thenReturn(false);
         when(userRepository.existsByEmail("admin@email.com")).thenReturn(false);
-        when(userRepository.count()).thenReturn(0L); // Пустая база - первый пользователь
+        when(userRepository.count()).thenReturn(0L);
         when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
         when(jwtService.generateToken(any())).thenReturn("jwtToken");
         when(jwtService.getJwtExpiration()).thenReturn(3600000L);
@@ -60,17 +59,15 @@ class AuthServiceImplTest {
                 .password("encodedPassword")
                 .firstName("John")
                 .lastName("Doe")
-                .role(Role.ADMIN) // Должен быть ADMIN
+                .role(Role.ADMIN)
                 .createdAt(LocalDateTime.now())
                 .isActive(true)
                 .build();
 
         when(userRepository.save(any())).thenReturn(savedUser);
 
-        // Act
         JwtResponse response = authService.register(request);
 
-        // Assert
         assertNotNull(response);
         assertEquals("ADMIN", response.getUser().getRole());
         verify(userRepository).count();
@@ -78,7 +75,6 @@ class AuthServiceImplTest {
 
     @Test
     void register_SubsequentUser_ShouldBeUser() {
-        // Arrange
         RegisterRequest request = new RegisterRequest(
                 "user", "password", "user@email.com", "Jane", "Smith"
         );
@@ -97,17 +93,15 @@ class AuthServiceImplTest {
                 .password("encodedPassword")
                 .firstName("Jane")
                 .lastName("Smith")
-                .role(Role.USER) // Должен быть USER
+                .role(Role.USER)
                 .createdAt(LocalDateTime.now())
                 .isActive(true)
                 .build();
 
         when(userRepository.save(any())).thenReturn(savedUser);
 
-        // Act
         JwtResponse response = authService.register(request);
 
-        // Assert
         assertNotNull(response);
         assertEquals("USER", response.getUser().getRole());
         verify(userRepository).count();
@@ -122,7 +116,6 @@ class AuthServiceImplTest {
 
         when(userRepository.existsByUsername("existing")).thenReturn(true);
 
-        // Act & Assert
         assertThrows(AuthenticationException.class, () -> authService.register(request));
         verify(userRepository, never()).count();
     }

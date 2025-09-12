@@ -80,7 +80,6 @@ class TransferServiceImplTest {
 
     @Test
     void transferBetweenOwnCards_ValidRequest_ReturnsResponse() {
-        // Arrange
         when(userService.findByUsername("testuser")).thenReturn(testUser);
         when(cardRepository.findByIdAndUser(1L, testUser)).thenReturn(Optional.of(fromCard));
         when(cardRepository.findByIdAndUser(2L, testUser)).thenReturn(Optional.of(toCard));
@@ -99,10 +98,8 @@ class TransferServiceImplTest {
 
         when(transactionRepository.save(any(Transaction.class))).thenReturn(transaction);
 
-        // Act
         TransferResponse response = transferService.transferBetweenOwnCards(transferRequest, "testuser");
 
-        // Assert
         assertNotNull(response);
         assertEquals(1L, response.getFromCardId());
         assertEquals(2L, response.getToCardId());
@@ -115,11 +112,9 @@ class TransferServiceImplTest {
 
     @Test
     void transferBetweenOwnCards_SourceCardNotFound_ThrowsException() {
-        // Arrange
         when(userService.findByUsername("testuser")).thenReturn(testUser);
         when(cardRepository.findByIdAndUser(1L, testUser)).thenReturn(Optional.empty());
 
-        // Act & Assert
         assertThrows(ResourceNotFoundException.class, () -> {
             transferService.transferBetweenOwnCards(transferRequest, "testuser");
         });
@@ -127,13 +122,11 @@ class TransferServiceImplTest {
 
     @Test
     void transferBetweenOwnCards_InsufficientFunds_ThrowsException() {
-        // Arrange
         transferRequest.setAmount(new BigDecimal("2000.00"));
         when(userService.findByUsername("testuser")).thenReturn(testUser);
         when(cardRepository.findByIdAndUser(1L, testUser)).thenReturn(Optional.of(fromCard));
         when(cardRepository.findByIdAndUser(2L, testUser)).thenReturn(Optional.of(toCard));
 
-        // Act & Assert
         assertThrows(InsufficientFundsException.class, () -> {
             transferService.transferBetweenOwnCards(transferRequest, "testuser");
         });
@@ -141,12 +134,10 @@ class TransferServiceImplTest {
 
     @Test
     void transferBetweenOwnCards_SameCard_ThrowsException() {
-        // Arrange
         transferRequest.setToCardId(1L); // Same as fromCard
         when(userService.findByUsername("testuser")).thenReturn(testUser);
         when(cardRepository.findByIdAndUser(1L, testUser)).thenReturn(Optional.of(fromCard));
 
-        // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
             transferService.transferBetweenOwnCards(transferRequest, "testuser");
         });
@@ -154,13 +145,11 @@ class TransferServiceImplTest {
 
     @Test
     void transferBetweenOwnCards_CurrencyMismatch_ThrowsException() {
-        // Arrange
         toCard.setCurrency("EUR");
         when(userService.findByUsername("testuser")).thenReturn(testUser);
         when(cardRepository.findByIdAndUser(1L, testUser)).thenReturn(Optional.of(fromCard));
         when(cardRepository.findByIdAndUser(2L, testUser)).thenReturn(Optional.of(toCard));
 
-        // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
             transferService.transferBetweenOwnCards(transferRequest, "testuser");
         });
@@ -168,13 +157,11 @@ class TransferServiceImplTest {
 
     @Test
     void transferBetweenOwnCards_CardBlocked_ThrowsException() {
-        // Arrange
         fromCard.setStatus(CardStatus.BLOCKED);
         when(userService.findByUsername("testuser")).thenReturn(testUser);
         when(cardRepository.findByIdAndUser(1L, testUser)).thenReturn(Optional.of(fromCard));
         when(cardRepository.findByIdAndUser(2L, testUser)).thenReturn(Optional.of(toCard));
 
-        // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
             transferService.transferBetweenOwnCards(transferRequest, "testuser");
         });
@@ -182,7 +169,6 @@ class TransferServiceImplTest {
 
     @Test
     void getTransferDetails_ValidTransfer_ReturnsResponse() {
-        // Arrange
         Transaction transaction = Transaction.builder()
                 .id(1L)
                 .fromCard(fromCard)
@@ -197,10 +183,8 @@ class TransferServiceImplTest {
         when(userService.findByUsername("testuser")).thenReturn(testUser);
         when(transactionRepository.findByIdAndUser(1L, testUser)).thenReturn(Optional.of(transaction));
 
-        // Act
         TransferResponse response = transferService.getTransferDetails(1L, "testuser");
 
-        // Assert
         assertNotNull(response);
         assertEquals(1L, response.getId());
         assertEquals(1L, response.getFromCardId());
@@ -209,11 +193,9 @@ class TransferServiceImplTest {
 
     @Test
     void getTransferDetails_TransferNotFound_ThrowsException() {
-        // Arrange
         when(userService.findByUsername("testuser")).thenReturn(testUser);
         when(transactionRepository.findByIdAndUser(1L, testUser)).thenReturn(Optional.empty());
 
-        // Act & Assert
         assertThrows(ResourceNotFoundException.class, () -> {
             transferService.getTransferDetails(1L, "testuser");
         });
