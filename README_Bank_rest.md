@@ -245,8 +245,7 @@ curl -X PATCH "http://localhost:8080/api/cards/1/block" -H "Authorization: Beare
 Администрирование
 Получить всех пользователей (только для админов)
 bash
-curl -X GET "http://localhost:8080/api/admin/users" \
--H "Authorization: Bearer <admin-jwt-token>"
+curl -X GET "http://localhost:8080/api/admin/users" -H "Authorization: Bearer YOUR_ADMIN_TOKEN_HERE" -H "Content-Type: application/json"
 🗄️ База данных
 Диаграмма базы данных
 text
