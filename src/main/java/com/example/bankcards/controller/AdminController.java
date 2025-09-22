@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * Контроллер для административных операций.
+ * Предоставляет endpoints доступные только пользователям с ролью ADMIN.
+ */
 @RestController
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
@@ -22,6 +26,11 @@ public class AdminController {
 
     private final UserService userService;
 
+    /**
+     * Получает список всех зарегистрированных пользователей системы.
+     *
+     * @return ResponseEntity со списком пользователей в формате UserResponse
+     */
     @GetMapping("/users")
     @Operation(summary = "Get all users", description = "Admin only endpoint")
     public ResponseEntity<List<UserResponse>> getAllUsers() {

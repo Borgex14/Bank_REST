@@ -16,6 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Контроллер для управления банковскими картами.
+ * Предоставляет endpoints для создания, просмотра и блокировки карт.
+ */
 @RestController
 @RequestMapping("/api/cards")
 @RequiredArgsConstructor
@@ -25,6 +29,13 @@ public class CardController {
     private final CardService cardService;
     private final SecurityUtils securityUtils;
 
+    /**
+     * Создает новую банковскую карту.
+     * Доступно только администраторам.
+     *
+     * @param request данные для создания карты
+     * @return созданная карта в формате CardResponse
+     */
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Create new card", description = "Admin only endpoint")
@@ -34,6 +45,13 @@ public class CardController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Получает список карт пользователя с поддержкой фильтрации и пагинации.
+     *
+     * @param filter параметры фильтрации карт
+     * @param pageable параметры пагинации
+     * @return страница с картами пользователя
+     */
     @GetMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Get user cards with filtering and pagination")
@@ -46,6 +64,12 @@ public class CardController {
         return ResponseEntity.ok(cards);
     }
 
+    /**
+     * Блокирует указанную карту.
+     *
+     * @param cardId идентификатор карты для блокировки
+     * @return обновленная информация о карте
+     */
     @PatchMapping("/{cardId}/block")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Block card")

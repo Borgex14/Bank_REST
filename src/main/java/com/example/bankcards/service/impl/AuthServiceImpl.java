@@ -18,6 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+/**
+ * Реализация сервиса аутентификации и авторизации.
+ * Обеспечивает регистрацию, вход и выход пользователей.
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -27,6 +31,14 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    /**
+     * Регистрирует нового пользователя в системе.
+     * Первый зарегистрированный пользователь получает роль ADMIN, последующие - USER.
+     *
+     * @param request данные для регистрации пользователя
+     * @return JwtResponse с JWT токеном и информацией о пользователе
+     * @throws AuthenticationException если username или email уже существуют
+     */
     @Override
     @Transactional
     public JwtResponse register(RegisterRequest request) {
@@ -70,6 +82,13 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
+    /**
+     * Выполняет аутентификацию пользователя.
+     *
+     * @param request учетные данные пользователя
+     * @return JwtResponse с JWT токеном и информацией о пользователе
+     * @throws AuthenticationException если учетные данные неверны или пользователь не найден
+     */
     @Override
     public JwtResponse login(LoginRequest request) {
         try {
@@ -103,6 +122,11 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
+    /**
+     * Выполняет выход пользователя из системы, инвалидируя JWT токен.
+     *
+     * @param token JWT токен для инвалидации
+     */
     @Override
     public void logout(String token) {
         jwtService.invalidateToken(token);

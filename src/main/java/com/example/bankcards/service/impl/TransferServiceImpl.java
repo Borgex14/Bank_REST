@@ -19,6 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Реализация сервиса для управления переводами между картами.
+ * Обеспечивает выполнение переводов и получение информации о них.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -28,6 +32,16 @@ public class TransferServiceImpl implements TransferService {
     private final TransactionRepository transactionRepository;
     private final UserService userService;
 
+    /**
+     * Выполняет перевод денежных средств между картами одного пользователя.
+     *
+     * @param request данные для перевода
+     * @param username имя пользователя, выполняющего перевод
+     * @return TransferResponse с информацией о выполненном переводе
+     * @throws ResourceNotFoundException если карты не найдены или не принадлежат пользователю
+     * @throws IllegalArgumentException если параметры перевода некорректны
+     * @throws InsufficientFundsException если на карте-отправителе недостаточно средств
+     */
     @Override
     @Transactional
     public TransferResponse transferBetweenOwnCards(TransferRequest request, String username) {
@@ -64,6 +78,14 @@ public class TransferServiceImpl implements TransferService {
         return mapToResponse(savedTransaction);
     }
 
+    /**
+     * Получает детальную информацию о конкретном переводе пользователя.
+     *
+     * @param transferId идентификатор перевода
+     * @param username имя пользователя
+     * @return TransferResponse с информацией о переводе
+     * @throws ResourceNotFoundException если перевод не найден или не принадлежит пользователю
+     */
     @Override
     public TransferResponse getTransferDetails(Long transferId, String username) {
         var user = userService.findByUsername(username);
@@ -73,6 +95,15 @@ public class TransferServiceImpl implements TransferService {
         return mapToResponse(transaction);
     }
 
+    /**
+     * Проверяет корректность параметров перевода.
+     *
+     * @param fromCard карта-отправитель
+     * @param toCard карта-получатель
+     * @param amount сумма перевода
+     * @throws IllegalArgumentException если параметры перевода некорректны
+     * @throws InsufficientFundsException если недостаточно средств на карте-отправителе
+     */
     private void validateTransfer(Card fromCard, Card toCard, BigDecimal amount) {
         if (fromCard.equals(toCard)) {
             throw new IllegalArgumentException("Cannot transfer to the same card");
@@ -99,6 +130,12 @@ public class TransferServiceImpl implements TransferService {
         }
     }
 
+    /**
+     * Преобразует сущность Transaction в TransferResponse.
+     *
+     * @param transaction сущность транзакции
+     * @return TransferResponse с информацией о переводе
+     */
     private TransferResponse mapToResponse(Transaction transaction) {
         return TransferResponse.builder()
                 .id(transaction.getId())

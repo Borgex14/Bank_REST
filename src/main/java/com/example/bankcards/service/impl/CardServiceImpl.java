@@ -26,6 +26,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * Реализация сервиса для управления банковскими картами.
+ * Обеспечивает создание, поиск, блокировку и удаление карт.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -35,6 +39,14 @@ public class CardServiceImpl implements CardService {
     private final UserService userService;
     private final EncryptionConfig encryptionConfig;
 
+    /**
+     * Создает новую банковскую карту для указанного пользователя.
+     *
+     * @param request данные для создания карты
+     * @param username имя пользователя-владельца карты
+     * @return CardResponse с информацией о созданной карте
+     * @throws CardOperationException если начальный баланс некорректен
+     */
     @Override
     @Transactional
     public CardResponse createCard(CardCreateRequest request, String username) {
@@ -68,6 +80,14 @@ public class CardServiceImpl implements CardService {
         return mapToResponse(savedCard);
     }
 
+    /**
+     * Получает список карт пользователя с поддержкой фильтрации и пагинации.
+     *
+     * @param filter параметры фильтрации карт
+     * @param username имя пользователя-владельца карт
+     * @param pageable параметры пагинации
+     * @return страница с отфильтрованными картами пользователя
+     */
     @Override
     @Transactional(readOnly = true)
     public Page<CardResponse> getUserCards(CardFilterRequest filter, String username, Pageable pageable) {
@@ -78,6 +98,14 @@ public class CardServiceImpl implements CardService {
                 .map(this::mapToResponse);
     }
 
+    /**
+     * Получает детальную информацию о конкретной карте пользователя.
+     *
+     * @param cardId идентификатор карты
+     * @param username имя пользователя-владельца карты
+     * @return CardResponse с детальной информацией о карте
+     * @throws ResourceNotFoundException если карта не найдена или не принадлежит пользователю
+     */
     @Override
     @Transactional(readOnly = true)
     public CardResponse getCardDetails(Long cardId, String username) {
@@ -88,6 +116,15 @@ public class CardServiceImpl implements CardService {
         return mapToResponse(card);
     }
 
+    /**
+     * Блокирует указанную карту пользователя.
+     *
+     * @param cardId идентификатор карты для блокировки
+     * @param username имя пользователя-владельца карты
+     * @return CardResponse с обновленной информацией о карте
+     * @throws ResourceNotFoundException если карта не найдена или не принадлежит пользователю
+     * @throws CardOperationException если карта уже заблокирована или просрочена
+     */
     @Override
     @Transactional
     public CardResponse blockCard(Long cardId, String username) {
@@ -110,6 +147,15 @@ public class CardServiceImpl implements CardService {
         return mapToResponse(updatedCard);
     }
 
+    /**
+     * Удаляет карту пользователя.
+     * Карта может быть удалена только если у нее нулевой баланс и она не активна.
+     *
+     * @param cardId идентификатор карты для удаления
+     * @param username имя пользователя-владельца карты
+     * @throws ResourceNotFoundException если карта не найдена или не принадлежит пользователю
+     * @throws CardOperationException если карта имеет положительный баланс или активна
+     */
     @Override
     @Transactional
     public void deleteCard(Long cardId, String username) {
@@ -130,6 +176,12 @@ public class CardServiceImpl implements CardService {
         log.info("Card {} deleted by user {}", cardId, username);
     }
 
+    /**
+     * Преобразует сущность Card в CardResponse с маскированным номером карты.
+     *
+     * @param card сущность карты
+     * @return CardResponse с маскированным номером карты
+     */
     private CardResponse mapToResponse(Card card) {
         return CardResponse.builder()
                 .id(card.getId())
@@ -144,6 +196,11 @@ public class CardServiceImpl implements CardService {
                 .build();
     }
 
+    /**
+     * Генерирует уникальный номер карты, которого еще нет в системе.
+     *
+     * @return уникальный номер карты
+     */
     private String generateUniqueCardNumber() {
         String cardNumber;
         do {
@@ -153,6 +210,11 @@ public class CardServiceImpl implements CardService {
         return cardNumber;
     }
 
+    /**
+     * Генерирует случайный CVV код для карты.
+     *
+     * @return CVV код в формате трех цифр
+     */
     private String generateCVV() {
         return String.format("%03d", (int) (Math.random() * 1000));
     }
