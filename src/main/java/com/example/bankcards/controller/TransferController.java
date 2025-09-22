@@ -12,6 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Контроллер для управления денежными переводами между картами.
+ * Предоставляет endpoints для выполнения переводов и просмотра их деталей.
+ */
 @RestController
 @RequestMapping("/api/transfers")
 @RequiredArgsConstructor
@@ -21,6 +25,12 @@ public class TransferController {
     private final TransferService transferService;
     private final SecurityUtils securityUtils;
 
+    /**
+     * Выполняет перевод денежных средств между собственными картами пользователя.
+     *
+     * @param request данные для перевода
+     * @return информация о выполненном переводе
+     */
     @PostMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Transfer between own cards")
@@ -30,6 +40,12 @@ public class TransferController {
         return ResponseEntity.ok(transferService.transferBetweenOwnCards(request, username));
     }
 
+    /**
+     * Получает детальную информацию о конкретном переводе.
+     *
+     * @param transferId идентификатор перевода
+     * @return детальная информация о переводе
+     */
     @GetMapping("/{transferId}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Get transfer details")

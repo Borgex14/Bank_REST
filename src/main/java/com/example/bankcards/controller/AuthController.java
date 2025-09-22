@@ -11,6 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Контроллер для аутентификации и авторизации пользователей.
+ * Обеспечивает регистрацию, вход и выход из системы.
+ */
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -19,18 +23,36 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /**
+     * Регистрирует нового пользователя в системе.
+     *
+     * @param request данные для регистрации
+     * @return JwtResponse с JWT токеном
+     */
     @PostMapping("/register")
     @Operation(summary = "Register new user")
     public ResponseEntity<JwtResponse> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
 
+    /**
+     * Выполняет аутентификацию пользователя.
+     *
+     * @param request учетные данные пользователя
+     * @return JwtResponse с JWT токеном
+     */
     @PostMapping("/login")
     @Operation(summary = "Login user")
     public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
 
+    /**
+     * Выполняет выход пользователя из системы.
+     *
+     * @param token JWT токен из заголовка Authorization
+     * @return ResponseEntity с статусом OK
+     */
     @PostMapping("/logout")
     @Operation(summary = "Logout user")
     public ResponseEntity<Void> logout(@RequestHeader("Authorization") String token) {
