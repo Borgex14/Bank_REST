@@ -28,11 +28,19 @@ public class ErrorResponse {
 
 @Data
 @NoArgsConstructor
-class ValidationErrorResponse extends ErrorResponse {
+class ValidationErrorResponse {
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime timestamp;
+    private int status;
+    private String error;
+    private String message;
     private Map<String, String> fieldErrors;
 
     public ValidationErrorResponse(LocalDateTime timestamp, int status, String error, String message, Map<String, String> fieldErrors) {
-        super(timestamp, status, error, message, "");
+        this.timestamp = timestamp;
+        this.status = status;
+        this.error = error;
+        this.message = message;
         this.fieldErrors = fieldErrors;
     }
 }
