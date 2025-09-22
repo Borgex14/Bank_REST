@@ -2,26 +2,31 @@ package com.example.bankcards.entity;
 
 import com.example.bankcards.entity.enums.CardStatus;
 import com.example.bankcards.entity.enums.CardType;
-import lombok.*;
 import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.Accessors;
+import org.hibernate.proxy.HibernateProxy;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "cards")
-@Data
+@Getter
+@Setter
+@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Accessors(chain = true)
 public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private Long id;
 
     @Convert(converter = CryptoConverter.class)
@@ -56,6 +61,7 @@ public class Card {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @ToString.Exclude
     private User user;
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -64,12 +70,14 @@ public class Card {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Builder.Default
     @OneToMany(mappedBy = "fromCard", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    @ToString.Exclude
     private List<Transaction> outgoingTransactions = new ArrayList<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "toCard", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    @ToString.Exclude
     private List<Transaction> incomingTransactions = new ArrayList<>();
 
     public boolean isBlocked() {
@@ -82,6 +90,12 @@ public class Card {
         if (expirationDate == null) {
             expirationDate = LocalDate.now().plusYears(3);
         }
+        if (balance == null) {
+            balance = BigDecimal.ZERO;
+        }
+        if (status == null) {
+            status = CardStatus.ACTIVE;
+        }
     }
 
     @PreUpdate
@@ -91,5 +105,23 @@ public class Card {
 
     public boolean isExpired() {
         return LocalDate.now().isAfter(expirationDate);
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ?
+                ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
+                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Card card = (Card) o;
+        return getId() != null && Objects.equals(getId(), card.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return getClass().hashCode();
     }
 }
